@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : jeu. 19 oct. 2023 à 11:39
+-- Généré le : ven. 20 oct. 2023 à 13:48
 -- Version du serveur : 10.6.12-MariaDB-0ubuntu0.22.04.1
 -- Version de PHP : 8.1.24
 
@@ -18,10 +18,28 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `projet_php`
+CREATE DATABASE projet_php;
 --
-CREATE DATABASE IF NOT EXISTS `projet_php` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `projet_php`;
+CREATE USER 'admin_projet_php'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON projet_php.* TO 'admin_projet_php'@'localhost';
+FLUSH PRIVILEGES;
+
+
+use projet_php;
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `articles`
+--
+
+CREATE TABLE `articles` (
+  `id` int(11) NOT NULL,
+  `articles_ids` varchar(255) NOT NULL,
+  `articles_classs` varchar(255) NOT NULL,
+  `articles_names` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -29,7 +47,6 @@ USE `projet_php`;
 -- Structure de la table `as`
 --
 
-DROP TABLE IF EXISTS `as`;
 CREATE TABLE `as` (
   `id` int(11) NOT NULL,
   `as_ids` varchar(50) DEFAULT NULL,
@@ -47,7 +64,6 @@ CREATE TABLE `as` (
 -- Structure de la table `audios`
 --
 
-DROP TABLE IF EXISTS `audios`;
 CREATE TABLE `audios` (
   `id` int(11) NOT NULL,
   `audios_srcs` varchar(255) DEFAULT NULL,
@@ -64,7 +80,6 @@ CREATE TABLE `audios` (
 -- Structure de la table `buttons`
 --
 
-DROP TABLE IF EXISTS `buttons`;
 CREATE TABLE `buttons` (
   `id` int(11) NOT NULL,
   `buttons_contents` varchar(255) DEFAULT NULL,
@@ -79,10 +94,24 @@ CREATE TABLE `buttons` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `divs`
+--
+
+CREATE TABLE `divs` (
+  `id` int(11) NOT NULL,
+  `divs_ids` varchar(255) NOT NULL,
+  `divs_classs` varchar(255) NOT NULL,
+  `divs_names` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `forms`
 --
 
-DROP TABLE IF EXISTS `forms`;
 CREATE TABLE `forms` (
   `id` int(11) NOT NULL,
   `forms_methods` varchar(5) NOT NULL,
@@ -99,7 +128,6 @@ CREATE TABLE `forms` (
 -- Structure de la table `h1s`
 --
 
-DROP TABLE IF EXISTS `h1s`;
 CREATE TABLE `h1s` (
   `id` int(11) NOT NULL,
   `h1s_ids` varchar(50) DEFAULT NULL,
@@ -116,7 +144,6 @@ CREATE TABLE `h1s` (
 -- Structure de la table `h2s`
 --
 
-DROP TABLE IF EXISTS `h2s`;
 CREATE TABLE `h2s` (
   `id` int(11) NOT NULL,
   `h2s_ids` varchar(50) DEFAULT NULL,
@@ -133,7 +160,6 @@ CREATE TABLE `h2s` (
 -- Structure de la table `h3s`
 --
 
-DROP TABLE IF EXISTS `h3s`;
 CREATE TABLE `h3s` (
   `id` int(11) NOT NULL,
   `h3s_ids` varchar(50) DEFAULT NULL,
@@ -150,7 +176,6 @@ CREATE TABLE `h3s` (
 -- Structure de la table `h4s`
 --
 
-DROP TABLE IF EXISTS `h4s`;
 CREATE TABLE `h4s` (
   `id` int(11) NOT NULL,
   `h4s_ids` varchar(50) DEFAULT NULL,
@@ -167,7 +192,6 @@ CREATE TABLE `h4s` (
 -- Structure de la table `h5s`
 --
 
-DROP TABLE IF EXISTS `h5s`;
 CREATE TABLE `h5s` (
   `id` int(11) NOT NULL,
   `h5s_ids` varchar(50) DEFAULT NULL,
@@ -184,7 +208,6 @@ CREATE TABLE `h5s` (
 -- Structure de la table `h6s`
 --
 
-DROP TABLE IF EXISTS `h6s`;
 CREATE TABLE `h6s` (
   `id` int(11) NOT NULL,
   `h6s_ids` varchar(50) DEFAULT NULL,
@@ -201,7 +224,6 @@ CREATE TABLE `h6s` (
 -- Structure de la table `imgs`
 --
 
-DROP TABLE IF EXISTS `imgs`;
 CREATE TABLE `imgs` (
   `id` int(11) NOT NULL,
   `imgs_ids` varchar(50) DEFAULT NULL,
@@ -219,7 +241,6 @@ CREATE TABLE `imgs` (
 -- Structure de la table `inputs`
 --
 
-DROP TABLE IF EXISTS `inputs`;
 CREATE TABLE `inputs` (
   `id` int(11) NOT NULL,
   `inputs_types` varchar(50) DEFAULT NULL,
@@ -239,7 +260,6 @@ CREATE TABLE `inputs` (
 -- Structure de la table `labels`
 --
 
-DROP TABLE IF EXISTS `labels`;
 CREATE TABLE `labels` (
   `id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -256,7 +276,6 @@ CREATE TABLE `labels` (
 -- Structure de la table `ols`
 --
 
-DROP TABLE IF EXISTS `ols`;
 CREATE TABLE `ols` (
   `id` int(11) NOT NULL,
   `ols_ids` varchar(50) DEFAULT NULL,
@@ -272,7 +291,6 @@ CREATE TABLE `ols` (
 -- Structure de la table `options`
 --
 
-DROP TABLE IF EXISTS `options`;
 CREATE TABLE `options` (
   `id` int(11) NOT NULL,
   `options_ids` varchar(50) DEFAULT NULL,
@@ -291,7 +309,6 @@ CREATE TABLE `options` (
 -- Structure de la table `pages`
 --
 
-DROP TABLE IF EXISTS `pages`;
 CREATE TABLE `pages` (
   `id` int(11) NOT NULL,
   `pages_names` varchar(255) DEFAULT NULL,
@@ -314,7 +331,6 @@ INSERT INTO `pages` (`id`, `pages_names`, `pages_urls`, `created_at`, `updated_a
 -- Structure de la table `ps`
 --
 
-DROP TABLE IF EXISTS `ps`;
 CREATE TABLE `ps` (
   `id` int(11) NOT NULL,
   `ps_ids` varchar(50) DEFAULT NULL,
@@ -328,10 +344,24 @@ CREATE TABLE `ps` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `sections`
+--
+
+CREATE TABLE `sections` (
+  `id` int(11) NOT NULL,
+  `sections_ids` varchar(255) NOT NULL,
+  `sections_classs` varchar(255) NOT NULL,
+  `sections_names` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `selects`
 --
 
-DROP TABLE IF EXISTS `selects`;
 CREATE TABLE `selects` (
   `id` int(11) NOT NULL,
   `selects_ids` varchar(50) DEFAULT NULL,
@@ -348,7 +378,6 @@ CREATE TABLE `selects` (
 -- Structure de la table `tables`
 --
 
-DROP TABLE IF EXISTS `tables`;
 CREATE TABLE `tables` (
   `id` int(11) NOT NULL,
   `tables_ids` varchar(50) DEFAULT NULL,
@@ -364,7 +393,6 @@ CREATE TABLE `tables` (
 -- Structure de la table `tags`
 --
 
-DROP TABLE IF EXISTS `tags`;
 CREATE TABLE `tags` (
   `id` int(11) NOT NULL,
   `tags_names` varchar(50) DEFAULT NULL,
@@ -422,7 +450,6 @@ INSERT INTO `tags` (`id`, `tags_names`, `created_at`, `updated_at`) VALUES
 -- Structure de la table `tbodys`
 --
 
-DROP TABLE IF EXISTS `tbodys`;
 CREATE TABLE `tbodys` (
   `id` int(11) NOT NULL,
   `tables_ids` int(11) DEFAULT NULL,
@@ -439,7 +466,6 @@ CREATE TABLE `tbodys` (
 -- Structure de la table `tds`
 --
 
-DROP TABLE IF EXISTS `tds`;
 CREATE TABLE `tds` (
   `id` int(11) NOT NULL,
   `tds_contents` varchar(255) DEFAULT NULL,
@@ -457,7 +483,6 @@ CREATE TABLE `tds` (
 -- Structure de la table `textareas`
 --
 
-DROP TABLE IF EXISTS `textareas`;
 CREATE TABLE `textareas` (
   `id` int(11) NOT NULL,
   `textareas_contents` text DEFAULT NULL,
@@ -476,7 +501,6 @@ CREATE TABLE `textareas` (
 -- Structure de la table `tfoots`
 --
 
-DROP TABLE IF EXISTS `tfoots`;
 CREATE TABLE `tfoots` (
   `id` int(11) NOT NULL,
   `tables_ids` int(11) DEFAULT NULL,
@@ -493,7 +517,6 @@ CREATE TABLE `tfoots` (
 -- Structure de la table `th`
 --
 
-DROP TABLE IF EXISTS `th`;
 CREATE TABLE `th` (
   `id` int(11) NOT NULL,
   `ths_contents` varchar(255) DEFAULT NULL,
@@ -511,7 +534,6 @@ CREATE TABLE `th` (
 -- Structure de la table `theads`
 --
 
-DROP TABLE IF EXISTS `theads`;
 CREATE TABLE `theads` (
   `id` int(11) NOT NULL,
   `tables_ids` int(11) DEFAULT NULL,
@@ -528,7 +550,6 @@ CREATE TABLE `theads` (
 -- Structure de la table `trs`
 --
 
-DROP TABLE IF EXISTS `trs`;
 CREATE TABLE `trs` (
   `id` int(11) NOT NULL,
   `theads_ids` int(11) DEFAULT NULL,
@@ -547,7 +568,6 @@ CREATE TABLE `trs` (
 -- Structure de la table `types_inputs`
 --
 
-DROP TABLE IF EXISTS `types_inputs`;
 CREATE TABLE `types_inputs` (
   `id` int(11) NOT NULL,
   `types_inputs_names` varchar(50) DEFAULT NULL,
@@ -555,13 +575,41 @@ CREATE TABLE `types_inputs` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Déchargement des données de la table `types_inputs`
+--
+
+INSERT INTO `types_inputs` (`id`, `types_inputs_names`, `created_at`, `updated_at`) VALUES
+(1, 'text', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(2, 'password', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(3, 'radio', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(4, 'checkbox', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(5, 'submit', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(6, 'reset', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(7, 'button', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(8, 'file', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(9, 'number', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(10, 'date', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(11, 'email', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(12, 'tel', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(13, 'url', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(14, 'search', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(15, 'color', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(16, 'range', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(17, 'hidden', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(18, 'datetime-local', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(19, 'month', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(20, 'week', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(21, 'time', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(22, 'datetime', '2023-10-19 15:35:21', '2023-10-19 15:35:21'),
+(23, 'image', '2023-10-19 15:35:21', '2023-10-19 15:35:21');
+
 -- --------------------------------------------------------
 
 --
 -- Structure de la table `uls`
 --
 
-DROP TABLE IF EXISTS `uls`;
 CREATE TABLE `uls` (
   `id` int(11) NOT NULL,
   `uls_ids` varchar(50) DEFAULT NULL,
@@ -577,7 +625,6 @@ CREATE TABLE `uls` (
 -- Structure de la table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `users_names` varchar(50) NOT NULL,
@@ -604,7 +651,6 @@ INSERT INTO `users` (`id`, `users_names`, `users_passwords`, `users_emails`, `us
 -- Structure de la table `videos`
 --
 
-DROP TABLE IF EXISTS `videos`;
 CREATE TABLE `videos` (
   `id` int(11) NOT NULL,
   `src` varchar(255) DEFAULT NULL,
@@ -618,6 +664,12 @@ CREATE TABLE `videos` (
 --
 -- Index pour les tables déchargées
 --
+
+--
+-- Index pour la table `articles`
+--
+ALTER TABLE `articles`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Index pour la table `as`
@@ -637,6 +689,12 @@ ALTER TABLE `audios`
 ALTER TABLE `buttons`
   ADD PRIMARY KEY (`id`),
   ADD KEY `form_id` (`forms_ids`);
+
+--
+-- Index pour la table `divs`
+--
+ALTER TABLE `divs`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Index pour la table `forms`
@@ -723,6 +781,12 @@ ALTER TABLE `pages`
 -- Index pour la table `ps`
 --
 ALTER TABLE `ps`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `sections`
+--
+ALTER TABLE `sections`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -823,6 +887,12 @@ ALTER TABLE `videos`
 --
 
 --
+-- AUTO_INCREMENT pour la table `articles`
+--
+ALTER TABLE `articles`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT pour la table `as`
 --
 ALTER TABLE `as`
@@ -838,6 +908,12 @@ ALTER TABLE `audios`
 -- AUTO_INCREMENT pour la table `buttons`
 --
 ALTER TABLE `buttons`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pour la table `divs`
+--
+ALTER TABLE `divs`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -925,6 +1001,12 @@ ALTER TABLE `ps`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT pour la table `sections`
+--
+ALTER TABLE `sections`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT pour la table `selects`
 --
 ALTER TABLE `selects`
@@ -988,7 +1070,7 @@ ALTER TABLE `trs`
 -- AUTO_INCREMENT pour la table `types_inputs`
 --
 ALTER TABLE `types_inputs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT pour la table `uls`
