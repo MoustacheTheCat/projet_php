@@ -79,7 +79,7 @@
                         <?php if ($_GET['name'] === 'users') : ?>
                             <?php foreach($users as $user) :?>
                                 <tr class="table-users-row">
-                                    <td class="table-users-col"><?php echo $user['user_name']?></td>
+                                    <td class="table-users-col"><?php echo $user['users_names']?></td>
                                     <td class="table-users-col"><a href="page_edit.php?id=<?php echo $user['id']?>&name=user">Edit user</a></td>
                                     <td class="table-users-col"><a href="http://projet_php.com/php/php_admin/user/delete_user.php?id=<?php echo $user['id']?>">Delete user</a></td>
                                 </tr>
@@ -90,7 +90,7 @@
                                     <td class="table-users-col"><?php echo $page['pages_names']?></td>
                                     <td class="table-users-col"><a href="page_edit.php?id=<?php echo $page['id']?>&name=page">Edit page</a></td>
                                     <?php if ($_SESSION['users_roles'] == 0): ?>
-                                        <td class="table-users-col"><a href="http://projet_php.com/php/php_admin/page/delete_page.php?id=<?php echo $page['id']?>&name=<?php echo $pages[0]['pages_names']?>">Delete page</a></td>
+                                        <td class="table-users-col"><a href="http://projet_php.com/php/php_admin/page/delete_page.php?id=<?php echo $page['id']?>&name=<?php echo $page['pages_names']?>">Delete page</a></td>
                                     <?php endif;  ?>
                                 </tr>
                             <?php  endforeach; ?>

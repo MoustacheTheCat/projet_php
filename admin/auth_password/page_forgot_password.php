@@ -1,3 +1,9 @@
+<?php
+
+session_start();
+require('../../php/config.php');
+require('../../php/time_conexion.php') ;
+?>
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -14,9 +20,9 @@
                     <h1>Forgot password</h1>
                 </div>
                 <div class="div-forgot-password">
-                    <form action="http://projet_php.com/php/php_admin/password/forgot_password.php?user_email=$_POST['user_email']">
+                    <form method="POST" action='../../php/php_admin/password/forgot_password.php'  >
                         <label for="user_email">Your email :</label>
-                        <input type="email" name="user_email" id="user_email_forgot">
+                        <input type="email" name="user_email" id="user_email">
                         <input type="submit" value="Send">
                     </form>
                 </div>

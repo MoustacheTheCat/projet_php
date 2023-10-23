@@ -1,10 +1,9 @@
 <?php
-    session_start();  
-    require('../php/config.php');
     $user_id = $_GET['id'];
-    $user_data = $db->prepare("SELECT * FROM users WHERE id = :id");
-    $user_data->execute(array(':id' => $user_id));
-    $user = $user_data->fetchAll();
+    session_start();  
+    require('../../php/config.php');
+    require('../../php/php_admin/request/request.php');
+    $user= getOneData($db, 'users', 'id',$user_id);
 ?>
 
 <!DOCTYPE html>

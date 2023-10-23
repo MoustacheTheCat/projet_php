@@ -116,7 +116,7 @@
                     </div>
                     <div>
                         <h2>Edit Content page <?php echo $page[0]['pages_names']?></h2>
-                        <a href="page_edit_content_page.php?id=<?php echo $page[0]['id']?>">Edit content page <?php echo $page[0]['pages_names']?></a>
+                        <a href="<?php echo "page_edit_content_page.php?id=".$page[0]['id']."&step=0";?>">Edit content page <?php echo $page[0]['pages_names']?></a>
                     </div>
                     <?php if ($_SESSION['users_roles'] == 0): ?>
                     <div class="div-delete-user">

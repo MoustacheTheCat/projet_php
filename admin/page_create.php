@@ -3,16 +3,16 @@
     require('../php/time_conexion.php');
     require('../php/config.php');
     $name = $_GET['name'];
-	if (isset($_SESSION["user_name"]) && $_SESSION["user_role"] > 1){
+	if (isset($_SESSION["user_name"]) && $_SESSION["users_roles"] > 1){
         header("Location: http://projet_php.com/admin/page_admin.php");
 		exit(); 
     }elseif (isset($_GET['name'])){
-        if($_GET['name'] === 'users' &&  $_SESSION["user_role"] === 0){
+        if($_GET['name'] === 'users' &&  $_SESSION["users_roles"] === 0){
             require('../php/config.php');
             $data_users = $db->prepare("SELECT * FROM users");
             $data_users->execute();
             $users = $data_users->fetchAll();
-        }elseif ($_GET['name'] === 'pages' && $_SESSION["user_role"] <  2){
+        }elseif ($_GET['name'] === 'pages' && $_SESSION["users_roles"] <  2){
             require('../php/config.php');
             $data_pages = $db->prepare("SELECT * FROM  pages");
             $data_pages->execute();
@@ -70,9 +70,9 @@
                     </div>
                 <?php elseif ($_GET['name'] === 'pages') : ?>
                     <div class="form-create-page">
-                        <form action="http://projet_php.com/php/php_admin/page/create_page.php" method="POST">
+                        <form action="/php/php_admin/page/create_page.php" method="POST">
                             <label for="page_name">Page name :</label>
-                            <input type="text" name="page_name" require>
+                            <input type="text" name="pages_name" require>
                             <!-- <label for="page_url">Page url :</label>
                             <input type="text" name="user_url" require> -->
                             <input type="submit" value="Create new page">

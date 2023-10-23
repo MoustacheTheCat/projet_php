@@ -1,5 +1,5 @@
 <?php
-
+ini_set('display_errors', 'On');
 try
 {
 $db = new PDO('mysql:host=localhost; dbname=projet_php; charset=utf8', 'admin_projet_php', 'password');

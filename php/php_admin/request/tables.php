@@ -214,6 +214,13 @@ $objets->trs = [
     'tfoots_ids',
 ];
 
+$objets->lis = [
+    'lis_contents',
+    'lis_ids',
+    'lis_classs',
+    'lis_names',
+];
+
 $objets->uls = [
     'uls_ids',
     'uls_classs',
