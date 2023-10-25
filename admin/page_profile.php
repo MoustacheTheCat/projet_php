@@ -7,8 +7,8 @@
 		exit(); 
 	} elseif (isset($_SESSION["user_name"])) {
         $user_name = $_SESSION["user_name"];
-        $user_data = $db->prepare("SELECT * FROM users WHERE user_name = :user_name");
-        $user_data->execute(array(':user_name' => $user_name));
+        $user_data = $db->prepare("SELECT * FROM users WHERE users_names = :users_names");
+        $user_data->execute(array(':users_names' => $user_name));
         $user = $user_data->fetchAll();
     }else {
         header("Location: ../not_acces.php");
@@ -37,9 +37,9 @@
                         <h2>Update my info</h2>
                         <form method="POST" action="http://projet_php.com/php/php_admin/user/update_user_info.php?id=<?php echo $user[0]['id'] ?>">
                                 <label for="user_name">User name :</label>
-                                <input type="text" name="user_name" require placeholder="<?php echo $user[0]['user_name'] ?>">
+                                <input type="text" name="user_name" require placeholder="<?php echo $user[0]['users_names'] ?>">
                                 <label for="user_email">User Email :</label>
-                                <input type="email" name="user_email" require placeholder="<?php echo $user[0]['user_email'] ?>">
+                                <input type="email" name="user_email" require placeholder="<?php echo $user[0]['users_emails'] ?>">
                                 <input type="submit" value="confirmer">
                         </form>
                     </div>
@@ -55,17 +55,17 @@
                             <input type="submit" value="confirmer">
                         </form>
                     </div>
-                    <?php if($_SESSION["user_role"] === 0): ?>
+                    <?php if($_SESSION["users_roles"] === 0): ?>
                         <div class="div-update-role">
                             <h2>Update Role</h2>
                             <form  method="POST" action="http://projet_php.com/php/php_admin/user/update_user_role.php?id=<?php echo $user[0]['id'] ?>">
                                 <label for="user_role">User role :</label>
                                 <select name="user_role" id="user_role" require>
-                                    <option value="<?php echo $user[0]['user_role']?>">
+                                    <option value="<?php echo $user[0]['users_roles']?>">
                                         <?php 
-                                        if ($user[0]['user_role'] === 0) {
+                                        if ($user[0]['users_roles'] === 0) {
                                             echo "Admin";
-                                        } elseif ($user[0]['user_role'] === 1) {
+                                        } elseif ($user[0]['users_roles'] === 1) {
                                             echo "Author";
                                         } else {
                                             echo 'User';

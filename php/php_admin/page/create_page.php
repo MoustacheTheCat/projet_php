@@ -1,7 +1,7 @@
 <?php
 
 require('../../config.php');
-require('../../time_conexion.php');
+// require('../../time_conexion.php');
 require('../request/request.php');
 session_start();
 $pages = getAllData($db, 'pages');
