@@ -1,11 +1,12 @@
 <?php 
 session_start();
-if (isset($_GET['id']) && isset($_POST['reset'])){
-    unset($_SESSION['type_cont']);
-    unset($_SESSION['objetParents']);
-    unset($_SESSION['cont_table']);
-    unset($_SESSION['cont_form']);
-    header("Location: ../../../admin/page_edit_content_page.php?id=".$_GET['id']."&step=0");
+if (isset($_POST['reset'])){
+    foreach ($_SESSION as $key => $value) {
+        if ($key != 'user_name' && $key != 'id' && $key != 'users_roles' && $key != 'start' && $key != 'id_page'){
+            unset($_SESSION[$key]);
+        }
+    }
+    header("Location: ../../../admin/page_edit_content_page.php?id=".$_SESSION['id_page']."&step=0");
     die;
     }
 ?>

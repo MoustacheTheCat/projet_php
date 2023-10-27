@@ -9,6 +9,7 @@
 		exit(); 
     } elseif (isset($_GET['id']) && is_numeric($_GET['id'])) {
             $this_id =  $_GET['id'];
+            $_SESSION['id_page'] = $this_id;
             $name_author="";
             $page = getOneData($db, 'pages', 'id',$this_id);
             $users = getAllData($db, 'users');
@@ -18,7 +19,7 @@
                 array_push($tagObs, $tag['tags_names']);
             }
             $containers = ['section','div','article'];
-            $firstChildrens = ['container', 'tags', 'lists', 'tables', 'forms'];
+            $firstChilsdrens = ['container', 'tags', 'lists', 'tables', 'forms'];
             $typeLists = ['ul', 'ol'];
             $typesInputs = getAllData($db, 'types_inputs');
             $tablesObs = $tabelsObjets['tables'];
@@ -47,8 +48,38 @@
                 );
         }
     }
-    function btnReset($ident){
-        echo "<form method='POST' action='../php/php_admin/page/reset.php?id=".$ident."'><input type='submit' name='reset' id='btn-reset' value='Reset'></form>";
+    function configureAnyElements($tbs, $nBEs){
+        foreach($tbs as $tb) {
+        for($nb=0;$nb<$nBEs;$nb++){
+           echo("<label for=".$tb."_".$nBEs.">".ucfirst($tb)." ".($nb+1)." </label>
+                <input type='text' name=".$tb."_".$nBEs." placeholder=".ucfirst($tb).">"
+                );
+            }
+            echo "<br>";
+        }
+        foreach($tbs as $tb) {
+            echo("<label for=".$tb.">".ucfirst($tb)."</label>
+                <input type='text' name=".$tb." placeholder=".ucfirst($tb)."><br>"
+                );
+        }
+    }
+    function btnReset(){
+        echo "<form method='POST' action='../php/php_admin/page/reset.php'><input type='submit' name='reset' id='btn-reset' value='Reset'></form>";
+    }
+
+    function nbTrTdTh($typeT, $nL){
+        echo "<label for='nb_".$typeT."_".$nL."'>Numbers of ".$typeT."_".$nL." :</label>";
+        echo "<input type='number' name='nb_".$typeT."_".$nL."' id='nb_".$typeT."_".$nL."' min='1' placeholder='1'>";
+                                        
+    }
+
+    function addInArray($dTabs,$Rtabs){
+        foreach($dTabs as $key => $value){
+            if($value != 'Valider'){
+                $Rtabs[$key] = $value;
+            }
+        }
+        return $Rtabs;
     }
 ?>
 
@@ -77,7 +108,7 @@
                         <input type="submit" value="Valider" name="sub-step-1">
                     </form> 
                     <?php elseif ($_GET['step'] == "1") : ?>
-                        <?php var_dump($_SESSION); ?>
+                        <!-- <?php var_dump($_SESSION); ?> -->
                         <?php if(isset($_POST['type_container'])){
                             $_SESSION['type_cont'] = $_POST['type_container'];
                         }
@@ -91,8 +122,8 @@
                             ?>
                         <input type="submit" value="Valider" name="sub-step-2">
                     </form>
-                    <?php var_dump($_SESSION); ?>
-                    <?php btnReset($this_id) ;?>
+                    <!-- <?php var_dump($_SESSION); ?> -->
+                    <?php btnReset() ;?>
                     <?php elseif ($_GET['step'] == "2") : ?>
                         <?php if (isset($_POST['sub-step-2'])){
                             $contParent = array();
@@ -109,15 +140,15 @@
                         }
                         ?>
                         <form action="<?php echo 'http://projet_php.com/admin/page_edit_content_page.php?id='.$this_id.'&step=3'; ?>" method="POST">
-                            <?php var_dump($_SESSION); ?>
+                            <!-- <?php var_dump($_SESSION); ?> -->
                             <h2>Choise the type of the first children</h2>
-                            <?php choiseTypeElement($firstChildrens, 'Type of first child','type_first_children'); ?>
+                            <?php choiseTypeElement($firstChilsdrens, 'Type of first child','type_first_children'); ?>
                             <input type="submit" value="Valider" name="sub-step-3">
                         </form>
-                        <?php btnReset($this_id) ;?>
+                        <?php btnReset() ;?>
                     <?php elseif ($_GET['step'] == "3") : ?>
                         <form action="<?php echo 'http://projet_php.com/admin/page_edit_content_page.php?id='.$this_id.'&step=4'; ?>" method="post">
-                            <?php var_dump($_SESSION); ?>
+                            <!-- <?php var_dump($_SESSION); ?> -->
                             <?php if (  $_POST['type_first_children'] == 'container') : ?>
                                 <h2>Choise the type of the children container</h2>
                                 <?php choiseTypeElement($containers, 'Children container', 'cont_f_c'); ?>
@@ -137,46 +168,36 @@
                             <?php endif; ?>
                             <input type="submit" value="Valider" name="sub-step-4">
                         </form>
-                        <?php btnReset($this_id) ;?>
+                        <?php btnReset() ;?>
                     <?php elseif ($_GET['step'] == "4") : ?>
+                        <?php var_dump($_SESSION);  var_dump($_POST)?>
+
                         <?php
                             if (isset($_POST['sub-step-4'])) {
+                                $datPosts = $_POST;
+                                $firstChils = array();
                                 if (isset($_POST['cont_f_c'])){
-                                    $contFCs = array();
-                                    $contFCs['cont_type'] = $_POST['cont_f_c'];
-                                    $_SESSION['cont_f_c'] = $contFCs;
+                                    $firstChils['fc_type'] = $_POST['cont_f_c'];
                                 }
                                 elseif (isset($_POST['tags'])) {
-                                    $contTags = array();
-                                    $contTags['cont_type'] = $_POST['tags'];
-                                    $_SESSION['cont_tag'] = $contTags;
+                                    $firstChils['fc_type'] = $_POST['tags'];
                                 }
                                 elseif (isset($_POST['lists'])) {
-                                    $contLists = array();
-                                    $contLists['cont_type'] = $_POST['lists'];
-                                    $_SESSION['cont_list'] = $contLists;
+                                    $firstChils['fc_type'] = $_POST['lists'];;
                                 }
                                 elseif (isset($_POST['tables_ids']) && isset($_POST['tables_classs']) && isset($_POST['tables_names'])) {
-                                    $contTables = array();
-                                    $contTables['cont_type'] = 'table';
-                                    $contTables['tables_ids'] = $_POST['tables_ids'];
-                                    $contTables['tables_classs'] = $_POST['tables_classs'];
-                                    $contTables['tables_names'] = $_POST['tables_names'];
-                                    $_SESSION['cont_table'] = $contTables;
+                                    $firstChils['fc_type'] = 'table';
+                                    addInArray($datPosts, $firstChils);
                                 }
                                 elseif (isset($_POST['forms_classs']) && isset($_POST['forms_names']) && isset($_POST['froms_methods']) && isset($_POST['forms_actions'])) {
-                                    $contForms = array();
-                                    $contForms['cont_type'] = 'form';
-                                    $contForms['forms_classs'] = $_POST['forms_classs'];
-                                    $contForms['forms_names'] = $_POST['forms_names'];
-                                    $contForms['froms_methods'] = $_POST['froms_methods'];
-                                    $contForms['forms_actions'] = $_POST['forms_actions'];
-                                    $_SESSION['cont_form'] = $contForms;
+                                    $firstChils['fc_type'] = 'form';
                                 }
+                                var_dump(addInArray($datPosts, $firstChils));
+                                $firstChils = addInArray($datPosts, $firstChils);
+                                $_SESSION['first_child'] = $firstChils;
                             }
                         ?>
                         <form action="<?php echo 'http://projet_php.com/admin/page_edit_content_page.php?id='.$this_id.'&step=5'; ?>" method="post">
-                            <?php var_dump($_SESSION); ?>
                             <?php if (isset($_POST['cont_f_c'])) :?>
                                 <h2>Configure  firstChild Conatiner  => <?php echo ucfirst($_POST['cont_f_c']);?></h2>
                                 <?php 
@@ -198,10 +219,10 @@
                             <?php elseif (isset($_POST['tables_ids']) && isset($_POST['tables_classs']) && isset($_POST['tables_names'])) :?>
                                 <h2>Create your table</h2>
                                 <label for="check_thead">Thead</label>
-                                <input type="checkbox" name="check_theader" id="check_theader">
+                                <input type="checkbox" name="check_thead" id="check_thead">
                                 <label for="check_tbody">TBody</label>
                                 <input type="checkbox" name="check_tbody" id="check_tbody">
-                                <label for="check_tfoot">TBody</label>
+                                <label for="check_tfoot">TFoot</label>
                                 <input type="checkbox" name="check_tfoot" id="check_tfoot">
                             <?php elseif (isset($_POST['forms_classs']) && isset($_POST['forms_names']) && isset($_POST['froms_methods']) && isset($_POST['forms_actions'])) :?>
                                 <h2>Form</h2>
@@ -210,44 +231,103 @@
                             <?php endif; ?>
                             <input type="submit" value="Valider" name="sub-step-5">
                         </form>
-                        <?php btnReset($this_id) ;?>
-                        
+                        <?php btnReset() ;?>
                     <?php elseif ($_GET['step'] == "5") : ?>
+                        <?php var_dump($_SESSION); var_dump($_POST); ?>
                         <?php if (isset($_POST['sub-step-5'])){ 
-                            if (!empty($_SESSION['cont_f_c'])){
-                                $cont=$_SESSION['cont_f_c'];
-                                unset($_SESSION['cont_f_c']);
+                            $firstChils = $_SESSION['first_child'];
+                            $datPosts = $_POST;
+                            $firstChils = addInArray($datPosts, $firstChils);
+                            if($firstChils['fc_type'] != 'table' || $firstChils['fc_type'] != 'form' || $firstChils['fc_type'] != 'list'){
+                                $firstChilObs = (object)$firstChils;
+                                $_SESSION['first_child'] = $firstChilObs;
                             }
-                            elseif (!empty($_SESSION['cont_tag'])){
-                                $cont=$_SESSION['cont_tag'];
-                                unset($_SESSION['cont_tag']);
-                            }
-                            elseif (!empty($_SESSION['cont_list'])){
-                                $cont=$_SESSION['cont_list'];
-                                unset($_SESSION['cont_list']);
-                            }
-                            elseif (!empty($_SESSION['cont_table'])){
-                                $cont=$_SESSION['cont_table'];
-                                unset($_SESSION['cont_table']);
-                            }
-                            elseif (!empty($_SESSION['cont_form'])){
-                                $cont=$_SESSION['cont_form'];
-                                unset($_SESSION['cont_form']);
-                            }
-                            
-                            $postReps = $_POST;
-                            foreach($postReps as $key => $value){
-                                if($value != 'Valider'){
-                                    $cont[$key] = $value;
-                                }
-                            }
-                            $_SESSION['first_child'] = $cont;
+                            $_SESSION['first_child'] = $firstChils;
                         }; ?>  
                         <form action="<?php echo 'http://projet_php.com/admin/page_edit_content_page.php?id='.$this_id.'&step=6'; ?>" method="post">
-                        
-                            
+                            <?php if ($_SESSION['first_child']['fc_type'] == "list"):?>
+                                <h2>List</h2>
+                                <?php for($nbl=0;$nbl<$_SESSION['first_child']['nb_li'];$nbl++):?>
+                                    <label for="li-<?php echo $nbl;?>">Li <?php echo $nbl;?></label>
+                                    <input type="text" name="li-<?php echo $nbl;?>" id="li-<?php echo $nbl;?>">
+                                <?php endfor;?>
+                            <?php elseif ($_SESSION['first_child']['fc_type'] == "table"):?>
+                                <h2>Table</h2>
+                                <?php 
+                                foreach($firstChils as $key => $firstChil){
+                                    if($firstChils[$key] == 'on'){
+                                        $lvName = substr($key, 6);
+                                        $lvNm = strtolower($lvName);
+                                        echo "<h3>".$lvName."</h3>";
+                                        nbTrTdTh('tr', $lvNm);
+                                        if($lvName == 'thead'){
+                                            nbTrTdTh('th',$lvNm);
+                                        } 
+                                        else{
+                                            nbTrTdTh('td', $lvNm);
+                                        }
+                                        
+                                    }
+                                }
+                                
+                            ?>
+                            <?php elseif ($_SESSION['first_child']['fc_type'] == "form"):?>
+                                <h2>Form</h2>
+                                <?php
+                                    nbTrTdTh('label','label');
+                                    nbTrTdTh('input','input');
+                                ?>
+                                <label for="add_textarea">Would you like to add TextArea :</label>
+                                <input type="checkbox" name="add_textarea" id="add_textarea">
+                                <label for="add_select">Would you like to add Select Menu to subject :</label>
+                                <input type="checkbox" name="add_select" id="add_select">
+                                <label for="add_send_copie">Would you like to add Send message Copie :</label>
+                                <input type="checkbox" name="add_send_copie" id="add_send_copie">
+                            <?php elseif($firstChils['fc_type'] != 'table' && $firstChils['fc_type'] != 'form' && $firstChils['fc_type'] != 'list'):?>
+                                <h2>Would you like to add other elements to the container?</h2>
+                                <input type="submit" value="Yes" name="sub-yes">
+                                <input type="submit" value="No" name="sub-no">
+                            <?php endif; ?>
+                            <?php if($firstChils['fc_type'] == 'table' || $firstChils['fc_type'] == 'form' || $firstChils['fc_type'] == 'list'):?>
+                                <input type='submit' value='Valider' name='sub-step-6'>;
+                            <?php endif; ?>
                         </form>
-                    <?php btnReset($this_id) ;?>
+                    <?php btnReset() ;?>
+                    <?php elseif ($_GET['step'] == "6") : ?>
+                        <?php  if (isset($_POST['sub-step-6'])){
+
+                            $firstChils = $_SESSION['first_child'];
+                            $datPosts = $_POST;
+                            $firstChils = addInArray($datPosts, $firstChils); 
+                            var_dump($firstChils);
+                            $_SESSION['first_child'] = $firstChils;
+                        }
+                        ?>
+                        <form action="<?php echo 'http://projet_php.com/admin/page_edit_content_page.php?id='.$this_id.'&step=7'; ?>" method="post">
+                            <h2>Step 6</h2>
+                            <?php if ($firstChils['fc_type'] == "table"):?>
+                                <?php 
+                                    $nbTrThead = $firstChils['nb_tr_thead'];
+                                    $nbTrTbody = $firstChils['nb_tr_tbody'];
+                                    $nbTrtfood = $firstChils['nb_tr_tfoot'];
+                                    $nbThThead = $firstChils['nb_th_thead'];
+                                    $nbTdTbody = $firstChils['nb_td_tbody'];
+                                    $nbTdTfoot = $firstChils['nb_td_tfoot'];
+                                    $trObs = $tabelsObjets['trs'];
+                                    $thObs = $tabelsObjets['ths'];
+                                    $tdObs = $tabelsObjets['tds'];
+
+                                    $rowtrHs =configureAnyElements($trObs, $nbTrThead);
+                                    $rowtrBs =configureAnyElements($trObs, $nbTrTbody);
+                                    $rowtrFs =configureAnyElements($trObs, $nbTrtfood);
+                                    $rowthHs =configureAnyElements($thObs, $nbThThead);
+                                    $rowtdBs =configureAnyElements($tdObs, $nbTdTbody);
+                                    $rowtdFs =configureAnyElements($tdObs, $nbTdTfoot);
+                                ?> 
+                            <?php endif; ?>
+                            <input type='submit' value='Valider' name='sub-step-6'>
+                        </form>
+                    <?php btnReset() ;?>
                     <?php endif; ?>
                 </div>
             </main>
