@@ -2,7 +2,7 @@
 
 session_start();
 require('../../php/config.php');
-require('../../php/time_conexion.php') ;
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">

@@ -50,17 +50,12 @@
     }
     function configureAnyElements($tbs, $nBEs){
         foreach($tbs as $tb) {
-        for($nb=0;$nb<$nBEs;$nb++){
-           echo("<label for=".$tb."_".$nBEs.">".ucfirst($tb)." ".($nb+1)." </label>
-                <input type='text' name=".$tb."_".$nBEs." placeholder=".ucfirst($tb).">"
-                );
-            }
-            echo "<br>";
+        for($nb=1;$nb<=$nBEs;$nb++){
+        echo("<label for=".$tb."_".$nBEs.">".ucfirst($tb)." ".($nb)." </label>
+            <input type='text' name=".$tb."_".$nBEs." placeholder=".ucfirst($tb).">"
+            );
         }
-        foreach($tbs as $tb) {
-            echo("<label for=".$tb.">".ucfirst($tb)."</label>
-                <input type='text' name=".$tb." placeholder=".ucfirst($tb)."><br>"
-                );
+        echo "<br>";
         }
     }
     function btnReset(){
@@ -81,6 +76,61 @@
         }
         return $Rtabs;
     }
+
+    function configTableRowsCols($names, $tblRows, $nbRows, $typeRows,$tblCols ,$nbCols, $typeCols){
+        if ($nbRows == 1 && $nbCols == 1){
+            echo "<h3>T".$names." Row with 1 Col</h3>";
+        }elseif ($nbRows > 1 && $nbCols == 1){
+            echo "<h3>T".$names." with ".$nbRows." Row with 1 Col</h3>";
+        }
+        elseif ($nbRows > 1 && $nbCols > 1){
+            echo "<h3>T".$names." with ".$nbRows." Row and ".$nbCols." Cols</h3>";
+        }
+        elseif ($nbRows == 1 && $nbCols > 1){
+            echo "<h3>T".$names." Row with ".$nbCols." Cols</h3>";
+        }
+        
+        for($nb=1;$nb<=$nbRows;$nb++){
+            if ($nbRows > 1){
+                echo "<h4>T".$names." Rows :</h4>";
+            }
+            else {
+                echo "<h4>T".$names." Row :</h4>";
+            }
+            echo"<p>Row number ".$nb." :</p>";
+            foreach($tblRows as $tblRow){
+                if(substr($tblRow, 0, 3) == $typeRows."s" || substr($tblRow, 1, 4) == "$names" ){
+                    echo("<label for=".$names."_".$tblRow."_".$nb.">".ucfirst($tblRow)."_".$nb."</label>
+                        <input type='text' name=".$names."_".$tblRow."_".$nb." placeholder=".ucfirst($tblRow)."_".$nb.">"
+                    );
+                }
+            }
+            echo "<br>";
+            if ($nbCols > 1){
+                echo "<h4>T".$names." Cols Row ".$nb.":</h4>";
+            }
+            else {
+                echo "<h4>T".$names." Col :</h4>";
+            }
+            for($nbC=1;$nbC<=$nbCols;$nbC++){
+                echo"<p>Col number ".$nbC." :</p>";
+                echo "<br>";
+                
+                foreach($tblCols as $tblCol){
+                    $dataForm = $names."_".$tblCol."_".$nbC."_row_".$nb;
+                    $dataText = $names."_".ucfirst($tblCol)."_".$nbC."_row_".$nb;
+                    if(substr($tblCol, 0, 3) == $typeCols."s" || substr($tblCol, 1, 4) == "$names" ){
+                        echo("<label for='". $dataForm."'>".$dataText."</label>
+                            <input type='text' name='".$dataForm."' placeholder=".$dataText.">"
+                        );
+                    }
+                }
+            }
+        }
+        echo "<br>";
+    };
+
+    
 ?>
 
 <!DOCTYPE html>
@@ -269,7 +319,6 @@
                                         
                                     }
                                 }
-                                
                             ?>
                             <?php elseif ($_SESSION['first_child']['fc_type'] == "form"):?>
                                 <h2>Form</h2>
@@ -307,25 +356,110 @@
                             <h2>Step 6</h2>
                             <?php if ($firstChils['fc_type'] == "table"):?>
                                 <?php 
-                                    $nbTrThead = $firstChils['nb_tr_thead'];
-                                    $nbTrTbody = $firstChils['nb_tr_tbody'];
-                                    $nbTrtfood = $firstChils['nb_tr_tfoot'];
-                                    $nbThThead = $firstChils['nb_th_thead'];
-                                    $nbTdTbody = $firstChils['nb_td_tbody'];
-                                    $nbTdTfoot = $firstChils['nb_td_tfoot'];
                                     $trObs = $tabelsObjets['trs'];
                                     $thObs = $tabelsObjets['ths'];
                                     $tdObs = $tabelsObjets['tds'];
-
-                                    $rowtrHs =configureAnyElements($trObs, $nbTrThead);
-                                    $rowtrBs =configureAnyElements($trObs, $nbTrTbody);
-                                    $rowtrFs =configureAnyElements($trObs, $nbTrtfood);
-                                    $rowthHs =configureAnyElements($thObs, $nbThThead);
-                                    $rowtdBs =configureAnyElements($tdObs, $nbTdTbody);
-                                    $rowtdFs =configureAnyElements($tdObs, $nbTdTfoot);
+                                    if($firstChils ["check_thead"] == 'on'){
+                                        $nbTrThead = $firstChils['nb_tr_thead'];
+                                        $nbThThead = $firstChils['nb_th_thead'];
+                                        configTableRowsCols('head', $trObs, $nbTrThead, 'tr', $thObs, $nbThThead, 'th');
+                                    }
+                                    if ($firstChils ["check_tbody"] == 'on'){
+                                        $nbTrTbody = $firstChils['nb_tr_tbody'];
+                                        $nbTdTbody = $firstChils['nb_td_tbody'];
+                                        configTableRowsCols('body', $trObs, $nbTrTbody, 'tr', $thObs, $nbTdTbody, 'th');
+                                    }
+                                    if ($firstChils ["check_tfoot"] == 'on') {
+                                        $nbTrTfoot = $firstChils['nb_tr_tfoot'];
+                                        $nbTdTfoot = $firstChils['nb_td_tfoot'];
+                                        configTableRowsCols('foot', $trObs, $nbTrTfoot, 'tr', $thObs, $nbTdTfoot , 'th');
+                                    }
                                 ?> 
                             <?php endif; ?>
-                            <input type='submit' value='Valider' name='sub-step-6'>
+                            <input type='submit' value='Valider' name='sub-step-7'>
+                        </form>
+                    <?php btnReset() ;?>
+                    <?php elseif ($_GET['step'] == "7") : ?>
+                        <?php if (isset($_POST['sub-step-7'])){
+                            $firstChils = $_SESSION['first_child'];
+                            // print_r($firstChils);
+                            // echo "<br>";
+                            //print_r($_POST);
+                            var_dump(count($_POST));
+                            echo "<br>";
+                            $datPosts = $_POST;
+                            $nbHRows = $firstChils['nb_tr_thead'];
+                            // echo $nbHRows;
+                            // $nbdataRow = 3;
+                            // $nbdataCol = 4;
+                            $nbCols = $firstChils['nb_th_thead'];
+                            $nbRows = $firstChils['nb_tr_tbody'];
+                            $nbCols = $firstChils['nb_td_tbody'];
+                            $nbRows = $firstChils['nb_tr_tfoot'];
+                            $nbCols = $firstChils['nb_td_tfoot'];
+                            $arrayRowsHead = array();
+                            $nbH = 0;
+                            $nbH2 = 0;
+                            foreach($datPosts as $key => $value){
+                                    // if(substr($key, 0, 8) === 'head_ths' && substr($key, -1) === '1'){
+                                    //     echo(substr($key, 0, 8));
+                                    //     echo   "<br>";
+                                    //     $nbH += 1;
+                                    // } 
+                                    // elseif (substr($key, 0, 8) === 'head_trs' && substr($key, -1) > '1'){
+                                    //     $nbH2 += 1;
+                                    // }
+                                    // if(substr($key, 0, 8) === 'head_ths'){
+                                    //     $nbH += 1;
+                                    // } 
+                                
+                               
+                            }
+                            echo $nbH;
+                            echo   "<br>";
+                            $arrayRowsHead1 = array_splice($datPosts, 0,4); 
+                            $arrayColsHead1 = array_splice($datPosts, 0,8);
+                            echo   "<br>";  
+                            print_r($arrayRowsHead1);
+                            echo   "<br>";
+                            print_r($arrayColsHead1);
+                            echo   "<br>";
+                            $arrayRowsHead2 = array_splice($datPosts, 0,4);
+                            $arrayColsHead2 = array_splice($datPosts, 0,8);
+                            echo   "<br>";  
+                            print_r($arrayRowsHead2);
+                            echo   "<br>";
+                            print_r($arrayColsHead2);
+                            echo   "<br>";
+                            echo   "<br>";
+                            print_r($datPosts);
+                            echo   "<br>";
+                            // if($firstChils ["check_thead"] == 'on'){
+                            //     echo"<h2>Head</h2>";
+                            //     $arrayThead = array();
+                            //     $arrayTheadRows = array();
+                            //     $arrayTheadCols = array();
+                            //     $nbRows = $firstChils['nb_tr_thead'];
+                            //     $nbCols = $firstChils['nb_th_thead'];
+                            // }
+                            // if ($firstChils ["check_tbody"] == 'on'){
+                            //    echo"<h2>Body</h2>";
+                            //    $arrayTbody = array();
+                            //    $arrayTbodyRows = array();
+                            //    $arrayTbodyCols = array();
+                               
+                            // }
+                            // if ($firstChils ["check_tfoot"] == 'on') {
+                            //     echo"<h2>Foot</h2>";
+                            //     $arrayTfoot = array();
+                            //     $arrayTfootRows = array();
+                            //     $arrayTfootCols = array();
+                                
+                            // }
+                        }
+                        ?>
+                        <form action="<?php echo 'http://projet_php.com/admin/page_edit_content_page.php?id='.$this_id.'&step=8'; ?>" method="post">
+                            <input type='submit' value='Valider' name='sub-step-7'>
                         </form>
                     <?php btnReset() ;?>
                     <?php endif; ?>
